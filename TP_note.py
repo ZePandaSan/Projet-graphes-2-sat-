@@ -53,7 +53,11 @@ def eval_2_sat(f,d1):
         result=(result and d2[value])
     return result
 
-print("Exercice 1 : ")
+
+def formula_2_graph(F, d):
+    return " "
+
+print("Exercice 3 : ")
 print(" ")
 print(f"F={F}")
 if eval_2_sat(F, dic):
@@ -62,5 +66,5 @@ else :
     print("F n'est pas satisfaisable")
 print(" ")
 print(" ")
-print("Exercice 2 : ")
+print("Exercice 4 : ")
 
