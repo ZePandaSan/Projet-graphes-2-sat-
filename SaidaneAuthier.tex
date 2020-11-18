@@ -21,6 +21,8 @@
     \tableofcontents
     \newpage
     \pagenumbering{arabic}
+    \section*{Note}
+    Ne connaissant pas les algorithme des fonctions sage nous avons considéré qu'elle constitué une seule opération (sauf mention contraire).
     \section{Nombre maximum de clause (Exercice 1)}
     Soit $n$ le nombre de variable et $p$ le nombre de variables dans une clause (ici 2). \\
     \\
@@ -78,6 +80,7 @@
      \end{lstlisting}
      Les valeurs d'une varaibles sont affectée à l'aide d'un dictionnaire. \\
      Chaque variable va pointer sur un booléen comme ceci : 
+     \footnote{Nous aurions également pu implémentez une fonction pour attribuer les négations mais ce n'était pas une de nos priorités.}
      \begin{lstlisting}
         dic={}
         dic[1] = True
@@ -93,45 +96,47 @@
         dic[-5] = not(dic[5])
         dic[-6] = not(dic[6])
      \end{lstlisting} 
-     NB : Nous aurions également pu implémentez une fonction pour attribuer les négations mais ce n'étais pas une de nos priorités.\\
     La chaine de caractère va être ensuite parsée. \\
     Voici une ébauche de notre code permetant d'évaluer une formule 
     \begin{lstlisting}
 
-    def clauses_liste(F)
+    def clauses_liste(F) #O(n)
 
-    def variables_par_clause(l1,l2)
+    def variables_par_clause(l1,l2) #O(n^2)
 
-    def eval_clauses(d1,d2,l)
+    def eval_clauses(d1,d2,l) #O(n)
 
     def eval_2_sat(f,d1):
         print(f"Affectation : {dic}")
-        clauses = clauses_liste(f)
+        clauses = clauses_liste(f) #O(n)
         print(f"Clauses : {clauses}")
         result = True
         clause=[]
-        variables_par_clause(clause,clauses)
+        variables_par_clause(clause,clauses) #o(n^2)
         print(f"Variables par clause : {clause}")
         d2={}
-        eval_clauses(d1,d2,clause)
+        eval_clauses(d1,d2,clause) #O(n)
         print(f"Evaluations par clause : {d2}")
-        for value in d2:
+        for value in d2: #O(n)
             result=(result and d2[value])
         return result
 
     \end{lstlisting}
+    Complexité : O($n^2$) \\ \\
     La fonction eval\_2\_sat prend en paramétre une formule f et un dictionnaire associé. Elle renvoit l'évaluation de la formule (en plus de quelques affichages pour faliciter la lecture). \\
     Tous d'abord nous allons appeler la fonction clauses\_liste qui prenant une formule 2-sat va renvoyer une liste (tableau) contenant les clauses. \\
     L'impémentation ce fait en une ligne en effet nous utilisons seulement la fonction split comme ceci : 
     \begin{lstlisting}
         def clauses_liste(F):
-            return F.split("&")
+            return F.split("&") 
     \end{lstlisting}
+    Complexité : O(n)\footnote{Il faut parcourir la chaine de caractères} \\
+    \\
     Nous splitons donc le tableau par le caractère "\&". \\
     Cette liste de clauses va être stocké dans une variable portant le même nom. \\ 
-    Ensuite nous appelons la procédure variables par clauses qui va ajouter dans une autre liste la liste des variables pas couples (même procédé que pour la fonction précédente). \\
+    Ensuite nous appelons la procédure variables par\_clauses (O($n^2$)\footnote{On parcours une liste et on split (parcours de chaine de caractère) à chaque élément}) qui va ajouter dans une autre liste la liste des variables pas couples (même procédé que pour la fonction précédente). \\
     Cette liste est appelé clause. \\
-    \newpage Ensuite nous allons créer un autre dictionnaire qui va affectée une évaluation pour chaque clause à l'aide de la fonction eval\_clauses. \\
+    Ensuite nous allons créer un autre dictionnaire qui va affectée une évaluation pour chaque clause à l'aide de la fonction eval\_clauses. \\
     \begin{lstlisting}
         def eval_clauses(d1,d2,l):
             for i in range(len(l)):
@@ -139,12 +144,74 @@
                 v2 = int(l[i][1])
                 d2[tuple(l[i])] = (d1[v1] or d1[v2])
     \end{lstlisting}
+    Complexité : O(n)\footnote{Il faut parcourir la liste} \\
+    \\
     La fonction prend un argument une liste et son dictionnaire et un dictionnaire (vide en théorie). \\
     Nous allons ensuites pour chaque clauses effectuer l'opération logique "ou" entre les deux variables. \\
     On affecte ensuite le couple à un booléen (la valuation). \\
     Enfin nous allons parcourir le dictionnaire qui affecte un booléen par couple (ici d2) pour effectuer l'opération logique "et" entre les différentes évaluations des couples. \\
     Cette opération nous donne l'évaluation de la formule complète de la formule stockée dans result.   
     \section{Graphe orienté associé à une formule}
+    Une formule 2-SAT peut être transformé en graphe. Ce graphe est appeler \textbf{graphe d'implication}. \\
+    \\
+    Un graphe d'inplication est un grpahe orienté assymétrique. Chaque sommet représente l'état de la variable booléenne, les arrêtes les implications entre ces varaibles.
+    \subsection{Théorie}
+    Un graphe d'implication à $2n$ sommets ($n$ étant le nombre de variables) et $2m$ arrêtes ($m$ étant le nombre de variables). \\
+    Chaque clauses est un ou logique mais peut être représentées par deux implications. \\
+    \underline{Exemple : } \\
+    $(x_1 \lor x_2)$ peut être représenter par $(\neg x_1 \Longrightarrow x_2)$ ou $(\neg x_2 \Longrightarrow x_1)$. On peut donc rajouter les arrêtes $(\neg x_1, x_2)$ et $(\neg x_2, x_1)$    
+    \newpage
+    \subsection{Application}
+    Nous allons prendre comme formule celle du sujet. 
+    \begin{equation*}
+        F=(x_1 \lor \neg x_2) \wedge (x_3 \lor x_4) \wedge (\neg x_2 \lor \neg x_3) \wedge (x_4 \lor \neg x_5) \wedge (x_2 \lor \neg x_5)
+    \end{equation*}
+    Nous pouvons déja déterminer le nombre de sommets et d'arrêtes. \\
+    Soit $n$ le nombre de variables, $m$ le nombre de clauses, $N$ le nombres de sommets et $M$ le nombre d'arrêtes. \\
+    $n=5$ \\
+    $m=5$ \\
+    $N=2n=10$ \\
+    $M=2m=10$ \\ 
+    Voici le graphe générer par notre code lorsqu'on entre notre formule sur sage (La sémenthique décrite précédement est la même). \\ 
+    \includegraphics{g.png} \\
+    Les variables $x_1,x_2,x_3,x_4$ et $x_5$ ansi que leurs négations sont représenter en sommets.
+    Prenons maintenant la première clause. \\
+    $(x_1 \lor \neg x_2)$ : on obtient donc les implications $\neg x_1 \Longrightarrow \neg x_2$ et $x_2 \Longrightarrow x_1$ \\
+    Le processus est le même pour les autres clauses.
+    \newpage
+    \subsection{Algorithme (Exercice 4)}
+    Voici une ébauche de la fonction formula\_2\_graph qui prend en argument un graphe et qui retourne son graphe associé.
+    \subsubsection*{Le code}
+    \begin{lstlisting}
+        [...] #O(n^2)
+        g = DiGraph()
+        for var in clause: #O(n)
+            g.add_vertices([int(var[0]), int(var[1])])
+        sommets = g.vertices()
+        for sommet in sommets:
+            g.add_vertices([sommet*-1]) #O(n)
+        [...]
+        for i in range(0, len(clause)): #O(n)
+            clause[i] = [int(clause[i][0]), int(clause[i][1])] #O(n)
+        for var in clause: #O(n)
+            g.add_edges([(var[0]*-1, var[1])])
+            g.add_edges([(var[1]*-1, var[0])])
+        return g
+    \end{lstlisting} 
+    Complexité : O($n^2$)\footnote{La fonction variables\_par\_classe est appelé}
+    \subsubsection*{Explication}
+    Le tableau clause contenant la liste des variables par clauses est obtenu de la même façon que l'exerice précédent.
+    Nous allons ajouter chaque sommets au graphes. Tous d'abord nous allons prendres toutes les variables par clause. A chaque parcours de clause les deux variables sont rajoutées au graphes. \\
+    \\ A ce moment la le graphe n'est pas complet nous allons donc rajouter toutes les négations manquantes. On va donc stocker tous les sommets dans un tableau sommets. \\
+    En implémentant les formules avec l'utilisation de "-" pour les négations ils nous aient facile de manipuler cette dernière. \\
+    En effet, on va parcourir chaque sommet et rajouter sa négation en multipliant par -1\footnote{Il existait des variables qui avaient déjà leurs négations représenter sur le graphe. Celà n'est pas dérengant les variables ont été écraser par elle-même.}. Les variables étant caster en entier précédement. \\
+    \\
+    Ensuite, nous allons rajouter les arrêtes. \\
+    \\ Pour celà nous allons nous intéresser aux clauses contenant un couples de variables. Ces dernières étant stocké en chaine de caractères nous les avons caster en entier pour pouvoir les manipuler. \\
+    Après celà nous pouvons effectuer les deux opérations pour rajouter les arrêtes. \\
+    On parcours les différentes variables de chaque clause. On rajoute une arrête allant de la négation de la première variable jusqu'à la seconde variable. \\
+    Ensuite on ajoute l'autre arrête entre la négation de la seconde variable et la première variable. \\
+    On va ainsi rajouter 2 arrêtes par clauses.
     \section{Algorithme pour vérifié si la formule est valide ou pas}
     
 \end{document}
