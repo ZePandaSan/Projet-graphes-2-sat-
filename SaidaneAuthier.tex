@@ -32,9 +32,9 @@
     \newpage
     \pagenumbering{arabic}
     \section*{Note}
-    Ne connaissant pas les algorithme des fonctions sage nous avons considéré qu'elle constitué une seule opération (sauf mention contraire).
-    \section{Nombre maximum de clause (Exercice 1)}
-    Soit $n$ le nombre de variable et $p$ le nombre de variables dans une clause (ici 2). \\
+    Ne connaissant pas les algorithme des fonctions sage nous avons considéré qu'elles sont constituées d'une seule opération (sauf mention contraire).
+    \section{Nombre maximum de clauses (Exercice 1)}
+    Soit $n$ le nombre de variables et $p$ le nombre de variables dans une clause (ici 2). \\
     \\
     Prenons $n=2$, \\
     On a au maximum 4 variables en prenant en compte les complémentaires, pour trouver le maximum on utilise la combinatoire on a donc 2 parmis 4.\\
@@ -53,7 +53,7 @@
     \section{Formule satisfaisable}
     \subsection{Exemples}
     \subsubsection{Formule satisfaisable}
-    Une formule est dite satisfaisable si la formule est valué à Vrai. \\
+    Une formule est dite satisfaisable si la formule est valuée à Vrai. \\
     Exemple (exemple du sujet): \\
     \begin{equation*}
         F=(x_1 \lor \neg x_2) \wedge (x_3 \lor x_4) \wedge (\neg x_2 \lor \neg x_3) \wedge (x_4 \lor \neg x_5) \wedge (x_2 \lor \neg x_5)
@@ -66,7 +66,7 @@
     $x_5$ = False \\
     \newpage
     \subsubsection{Formule non satisfaisable (Exercice 2)}
-    Inverssement une formule non satisfaisable est une formule valué à Faux
+    Inverssement une formule non satisfaisable est une formule valuée à Faux
     Exemple : \\
     \begin{equation*}
         F=(x_4 \lor \neg x_3) \wedge (x_4 \lor x_1) \wedge (\neg x_2 \lor \neg x_1) \wedge (x_2 \lor \neg x_5) \wedge (\neg x_2 \lor x_5)
@@ -78,8 +78,8 @@
     $x_4$ = False \\ 
     $x_5$ = False \\
     \subsection{Algorithme (Exercice 3)}
-    Pour implémenter l'algorithme de satisfaisabilité nous avons décider de représenter l'algorithme avec une sémenthique particulière. \\
-    Tous d'abord la formule est entré dans une chaine de caractère. \\
+    Pour implémenter l'algorithme de satisfaisabilité nous avons décidé de représenter l'algorithme avec une sémenthique particulière. \\
+    Tous d'abord la formule est entrée dans une chaine de caractère. \\
     Les clauses sont séparées par le symbole "\&", et les variables à l'intérieur de la clause sont séparées par le symbole "|". \\
     Lorsque la variable est précéder par "-" celà veut dire qu'il s'agit de la négation. \\
     $1 : x_1$ -> $-1 : \neg{x_1}$ \\
@@ -88,7 +88,7 @@
      \\On obtient \begin{lstlisting}
         F="1|-2&3|4&-2|-3&4|-5&2|-5"
      \end{lstlisting}
-     Les valeurs d'une varaibles sont affectée à l'aide d'un dictionnaire. \\
+     Les valeurs d'une variable sont affectées à l'aide d'un dictionnaire. \\
      Chaque variable va pointer sur un booléen comme ceci : 
      \footnote{Nous aurions également pu implémentez une fonction pour attribuer les négations mais ce n'était pas une de nos priorités.}
      \begin{lstlisting}
@@ -106,7 +106,7 @@
         dic[-5] = not(dic[5])
         dic[-6] = not(dic[6])
      \end{lstlisting} 
-    La chaine de caractère va être ensuite parsée. \\
+    La chaine de caractère va ensuite être parsée. \\
     Voici une ébauche de notre code permetant d'évaluer une formule 
     \begin{lstlisting}
 
@@ -133,9 +133,9 @@
 
     \end{lstlisting}
     Complexité : O($n^2$) \\ \\
-    La fonction eval\_2\_sat prend en paramétre une formule f et un dictionnaire associé. Elle renvoit l'évaluation de la formule (en plus de quelques affichages pour faliciter la lecture). \\
-    Tous d'abord nous allons appeler la fonction clauses\_liste qui prenant une formule 2-sat va renvoyer une liste (tableau) contenant les clauses. \\
-    L'impémentation ce fait en une ligne en effet nous utilisons seulement la fonction split comme ceci : 
+    La fonction eval\_2\_sat prend en paramètre une formule f et un dictionnaire associé. Elle renvoit l'évaluation de la formule (en plus de quelques affichages pour faciliter la lecture). \\
+    Tous d'abord nous allons appeler la fonction clauses\_liste qui prend une formule 2-sat et va renvoyer une liste (tableau) contenant les clauses. \\
+    L'implémentation se fait en une ligne, en effet nous utilisons seulement la fonction split comme ceci : 
     \begin{lstlisting}
         def clauses_liste(F):
             return F.split("&") 
@@ -143,8 +143,8 @@
     Complexité : O(n)\footnote{Il faut parcourir la chaine de caractères} \\
     \\
     Nous splitons donc le tableau par le caractère "\&". \\
-    Cette liste de clauses va être stocké dans une variable portant le même nom. \\ 
-    Ensuite nous appelons la procédure variables par\_clauses (O($n^2$)\footnote{On parcours une liste et on split (parcours de chaine de caractère) à chaque élément}) qui va ajouter dans une autre liste la liste des variables pas couples (même procédé que pour la fonction précédente). \\
+    Cette liste de clauses va être stockée dans une variable portant le même nom. \\ 
+    Ensuite nous appelons la procédure variables par\_clauses (O($n^2$)\footnote{On parcours une liste et on split (parcours de chaine de caractères) à chaque élément}) qui va ajouter dans une autre liste la liste des variables non couplées (même procédé que pour la fonction précédente). \\
     Cette liste est appelé clause. \\
     Ensuite nous allons créer un autre dictionnaire qui va affectée une évaluation pour chaque clause à l'aide de la fonction eval\_clauses. \\
     \begin{lstlisting}
@@ -164,10 +164,10 @@
     \section{Graphe orienté associé à une formule}
     Une formule 2-SAT peut être transformé en graphe. Ce graphe est appeler \textbf{graphe d'implication}. \\
     \\
-    Un graphe d'inplication est un grpahe orienté assymétrique. Chaque sommet représente l'état de la variable booléenne, les arrêtes les implications entre ces varaibles.
+    Un graphe d'implication est un graphe orienté assymétrique. Chaque sommet représente l'état de la variable booléenne, les arrêtes les implications entre ces variables.
     \subsection{Théorie}
     Un graphe d'implication à $2n$ sommets ($n$ étant le nombre de variables) et $2m$ arrêtes ($m$ étant le nombre de variables). \\
-    Chaque clauses est un ou logique mais peut être représentées par deux implications. \\
+    Chaque clauses est un "ou" logique mais peut être représentées par deux implications. \\
     \underline{Exemple : } \\
     $(x_1 \lor x_2)$ peut être représenter par $(\neg x_1 \Longrightarrow x_2)$ ou $(\neg x_2 \Longrightarrow x_1)$. On peut donc rajouter les arrêtes $(\neg x_1, x_2)$ et $(\neg x_2, x_1)$    
     \newpage
@@ -176,15 +176,15 @@
     \begin{equation*}
         F=(x_1 \lor \neg x_2) \wedge (x_3 \lor x_4) \wedge (\neg x_2 \lor \neg x_3) \wedge (x_4 \lor \neg x_5) \wedge (x_2 \lor \neg x_5)
     \end{equation*}
-    Nous pouvons déja déterminer le nombre de sommets et d'arrêtes. \\
+    Nous pouvons déjà déterminer le nombre de sommets et d'arrêtes. \\
     Soit $n$ le nombre de variables, $m$ le nombre de clauses, $N$ le nombres de sommets et $M$ le nombre d'arrêtes. \\
     $n=5$ \\
     $m=5$ \\
     $N=2n=10$ \\
     $M=2m=10$ \\ 
-    Voici le graphe générer par notre code lorsqu'on entre notre formule sur sage (La sémenthique décrite précédement est la même). \\ 
+    Voici le graphe génèré par notre code lorsqu'on entre notre formule sur sage (La sémenthique décrite précédement est la même). \\ 
     \includegraphics{g.png} \\
-    Les variables $x_1,x_2,x_3,x_4$ et $x_5$ ansi que leurs négations sont représenter en sommets.
+    Les variables $x_1,x_2,x_3,x_4$ et $x_5$ ansi que leurs négations sont représentées en sommets.
     Prenons maintenant la première clause. \\
     $(x_1 \lor \neg x_2)$ : on obtient donc les implications $\neg x_1 \Longrightarrow \neg x_2$ et $x_2 \Longrightarrow x_1$ \\
     Le processus est le même pour les autres clauses.
@@ -212,20 +212,20 @@
     \subsubsection*{Explication}
     Le tableau clause contenant la liste des variables par clauses est obtenu de la même façon que l'exerice précédent.
     Nous allons ajouter chaque sommets au graphes. Tous d'abord nous allons prendres toutes les variables par clause. A chaque parcours de clause les deux variables sont rajoutées au graphes. \\
-    \\ A ce moment la le graphe n'est pas complet nous allons donc rajouter toutes les négations manquantes. On va donc stocker tous les sommets dans un tableau sommets. \\
+    \\ A ce moment là, le graphe n'est pas complet nous allons donc rajouter toutes les négations manquantes. On va donc stocker tous les sommets dans un tableau sommets. \\
     En implémentant les formules avec l'utilisation de "-" pour les négations ils nous aient facile de manipuler cette dernière. \\
-    En effet, on va parcourir chaque sommet et rajouter sa négation en multipliant par -1\footnote{Il existait des variables qui avaient déjà leurs négations représenter sur le graphe. Celà n'est pas dérengant les variables ont été écraser par elle-même.}. Les variables étant caster en entier précédement. \\
+    En effet, on va parcourir chaque sommet et rajouter sa négation en multipliant par -1\footnote{Il existait des variables qui avaient déjà leurs négations représentées sur le graphe. Cela n'est pas dérengant, les variables ont été écraser par elle-même.}. Les variables étant castées en entier précédement. \\
     \\
     Ensuite, nous allons rajouter les arrêtes. \\
-    \\ Pour celà nous allons nous intéresser aux clauses contenant un couples de variables. Ces dernières étant stocké en chaine de caractères nous les avons caster en entier pour pouvoir les manipuler. \\
-    Après celà nous pouvons effectuer les deux opérations pour rajouter les arrêtes. \\
+    \\ Pour cela nous allons nous intéresser aux clauses contenant un couple de variables. Ces dernières étant stockées en chaine de caractères nous les avons castées en entier pour pouvoir les manipuler. \\
+    Après cela nous pouvons effectuer les deux opérations pour rajouter les arrêtes. \\
     On parcours les différentes variables de chaque clause. On rajoute une arrête allant de la négation de la première variable jusqu'à la seconde variable. \\
     Ensuite on ajoute l'autre arrête entre la négation de la seconde variable et la première variable. \\
     On va ainsi rajouter 2 arrêtes par clauses.
     \section{Validitée d'une formule}
     \subsection{Théorie}
     Pour vérifié de la validitée d'une formule, nous allons analyser son graphe générer précédément. En applicant l'algorithme de Tarjan on obitent un ordre topologique sur les composantes fortement connexe. Soit $CC=[x_1,x_2,...,x_n]$ la liste des composantes connexes par tri topologique. \\
-    Nous avons donc $\neg{(CC)}=[\neg x_1,\neg x_2,...,\neg x_n]$ qui est également une liste de composante connexe. La formule est valide si la négation d'une variable n'est pas déjà présente. En considérent les composantes dans l’ordre inverse, on va
+    Nous avons donc $\neg{(CC)}=[\neg x_1,\neg x_2,...,\neg x_n]$ qui est également une liste de composantes connexes. La formule est valide si la négation d'une variable n'est pas déjà présente. En considérent les composantes dans l’ordre inverse, on va
     leur affecter des valuations : tant qu’il reste une composante non valuée $CC$, on affecte à tous ses noeuds la valeur True et à tous les noeuds de $\neg CC$ la valeur False. 
     \subsection{Algorithme (Exercice 5)}
     Voici le code de la fonction est\_valide : 
@@ -245,5 +245,5 @@
     Complexité : O($n^3$)\footnote{La fonction sage : strongly\_connected\_components\_digraph() applique l'algorithme de Tarjan qui se fait en temps linéaire }
     \newpage
     \subsubsection*{Explication\footnote{Nous avons pas réussie à implémenter l'affectation}}
-    Nous avons caster l'objet sage de type digraphe\footnote{Composantes fortements connexes} en liste pour pouvoir la manipuler. Ensuite nous allons pour chaque composantes connexes mettre dans un tableau une variable et vérifié si sa négation n'est pas déjà stockée, si elle l'est on retourne False si non on peut réinitialiser le tableau et passer à la prochaine composante fortement connexe. 
+    Nous avons casté l'objet sage de type digraphe\footnote{Composantes fortements connexes} en liste pour pouvoir la manipuler. Ensuite nous allons pour chaque composantes connexes mettre dans un tableau une variable et vérifié si sa négation n'est pas déjà stockée, si elle l'est on retourne False si non on peut réinitialiser le tableau et passer à la prochaine composante fortement connexe. 
 \end{document}
