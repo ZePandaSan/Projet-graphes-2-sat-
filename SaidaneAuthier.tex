@@ -8,6 +8,7 @@
 \usepackage{hyperref}
 \usepackage[francais]{babel}
 \usepackage{listings}
+\usepackage{xcolor}
 
 
 \title{Rapport sur TP noté (résolution de 2-SAT)}
@@ -15,7 +16,16 @@
 \date{}
 
 \begin{document}
-    \lstset{language=python}
+    \lstset{%
+	language={python},
+	breaklines=true,
+	numbers=left,
+	numberstyle=\footnotesize,
+	captionpos=b,
+	basicstyle=\ttfamily,
+	keywordstyle=\bfseries\color{blue},
+	commentstyle=\itshape\color{green}
+	}
     \pagenumbering{gobble}
     \maketitle
     \tableofcontents
@@ -212,6 +222,28 @@
     On parcours les différentes variables de chaque clause. On rajoute une arrête allant de la négation de la première variable jusqu'à la seconde variable. \\
     Ensuite on ajoute l'autre arrête entre la négation de la seconde variable et la première variable. \\
     On va ainsi rajouter 2 arrêtes par clauses.
-    \section{Algorithme pour vérifié si la formule est valide ou pas}
-    
+    \section{Validitée d'une formule}
+    \subsection{Théorie}
+    Pour vérifié de la validitée d'une formule, nous allons analyser son graphe générer précédément. En applicant l'algorithme de Tarjan on obitent un ordre topologique sur les composantes fortement connexe. Soit $CC=[x_1,x_2,...,x_n]$ la liste des composantes connexes par tri topologique. \\
+    Nous avons donc $\neg{(CC)}=[\neg x_1,\neg x_2,...,\neg x_n]$ qui est également une liste de composante connexe. La formule est valide si la négation d'une variable n'est pas déjà présente. En considérent les composantes dans l’ordre inverse, on va
+    leur affecter des valuations : tant qu’il reste une composante non valuée $CC$, on affecte à tous ses noeuds la valeur True et à tous les noeuds de $\neg CC$ la valeur False. 
+    \subsection{Algorithme (Exercice 5)}
+    Voici le code de la fonction est\_valide : 
+    \subsubsection*{Le code}
+    \begin{lstlisting}
+        def est_valide(g):
+            liste_connex = list(strongly_connected_components_digraph(g))  # Tarjan O(n)
+            for connex in liste_connex: #O(n)
+                tab = []
+                for variable in connex: #O(n)
+                    variable_temp = variable*-1
+                    if tab.__contains__(variable_temp): #O(n)
+                        return False
+                tab.append(variable) #O(1)
+        return True
+    \end{lstlisting} 
+    Complexité : O($n^3$)\footnote{La fonction sage : strongly\_connected\_components\_digraph() applique l'algorithme de Tarjan qui se fait en temps linéaire }
+    \newpage
+    \subsubsection*{Explication\footnote{Nous avons pas réussie à implémenter l'affectation}}
+    Nous avons caster l'objet sage de type digraphe\footnote{Composantes fortements connexes} en liste pour pouvoir la manipuler. Ensuite nous allons pour chaque composantes connexes mettre dans un tableau une variable et vérifié si sa négation n'est pas déjà stockée, si elle l'est on retourne False si non on peut réinitialiser le tableau et passer à la prochaine composante fortement connexe. 
 \end{document}
