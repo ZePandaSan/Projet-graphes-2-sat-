@@ -10,22 +10,41 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
 
 \title{Rapport sur TP noté (résolution de 2-SAT)}
 \author{Wassim Saidane, Aurélien Authier}
 \date{}
 
 \begin{document}
-    \lstset{%
-	language={python},
-	breaklines=true,
-	numbers=left,
-	numberstyle=\footnotesize,
-	captionpos=b,
-	basicstyle=\ttfamily,
-	keywordstyle=\bfseries\color{blue},
-	commentstyle=\itshape\color{green}
-	}
     \pagenumbering{gobble}
     \maketitle
     \tableofcontents
@@ -232,7 +251,9 @@
     \subsubsection*{Le code}
     \begin{lstlisting}
         def est_valide(g):
-            liste_connex = list(strongly_connected_components_digraph(g))  # Tarjan O(n)
+            temp=list(strongly_connected_components_digraph(g))
+            # Tarjan O(n)
+            liste_connex = temp
             for connex in liste_connex: #O(n)
                 tab = []
                 for variable in connex: #O(n)
