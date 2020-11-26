@@ -1,5 +1,14 @@
+from sage.graphs.connectivity import strongly_connected_components_digraph
+import numpy as np
 print("Wassim SAIDANE et Aurélien Authier")
-
+#---------------------------------------------------------------------------------------------------------
+#| Le code ne prend pas en comple les formules qui ne sont pas rentrées en suivant notre sémentique"    #|
+#| 1- Pas d'espace !                                                                                    #|
+#| 2- Les clauses sont séparées par "&" (et)                                                            #|
+#| 3- Les parenthés sont sous-entendu caractères avant le "&"                                           #|
+#| 4- Les variables sont séparées par "|" (ou)                                                          #|
+#| En suivant ces règles les formules 2-sat fonctionnent                                                #|
+#---------------------------------------------------------------------------------------------------------
 
 F = "1|-2&3|4&-2|-3&4|-5&2|-5"
 G = "0|2&0|-3&1|-3&1|-4&2|-4&0|-5&1|-5&2|-5&3|6&4|6&5|6"
@@ -35,14 +44,6 @@ def eval_clauses(d1, d2, l):
 
 
 def eval_2_sat(f, d1):
-    #---------------------------------------------------------------------------------------------------------
-    #| Le code ne prend pas en comple les formules qui ne sont pas rentrées en suivant notre sémentique"    #|
-    #| Pas d'espace !                                                                                       #|
-    #| Les clauses sont séparées par "&" (et)                                                               #|
-    #| Les parenthés sont sous-entendu caractères avant le "&"                                              #|
-    #| Les variables sont séparées par "|" (ou)                                                             #|
-    #| Les formules 2-sat fonctionnent                                                                      #|
-    #---------------------------------------------------------------------------------------------------------
     print(f"Affectation : {dic}")
     clauses = clauses_liste(f)
     print(f"Clauses : {clauses}")
@@ -80,6 +81,18 @@ def formula_2_graph(F):
     return g
 
 
+def est_valide(g):
+    liste_connex = list(strongly_connected_components_digraph(g))  # Tarjan
+    for connex in liste_connex:
+        tab = []
+        for variable in connex:
+            variable_temp = variable*-1
+            if tab.__contains__(variable_temp):
+                return False
+            tab.append(variable)
+    return True
+
+
 print("Exercice 3 : ")
 print(" ")
 print(f"F={F}")
@@ -90,6 +103,15 @@ else:
 print(" ")
 print(" ")
 print("Exercice 4 : ")
+print(" ")
 print(f"F={F}")
 g = formula_2_graph(F)
 g.show()
+print(" ")
+print(" ")
+print("Exercice 5 :")
+print(" ")
+if est_valide(g):
+    print("La formule est valide")
+else:
+    print("La formule n'est pas valide")
